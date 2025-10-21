@@ -1,7 +1,6 @@
 import React, { useState, CSSProperties } from 'react';
 import Panel from './Panel';
-import { LogType } from '../types';
-import { ButtonStyles } from '../App';
+import { LogType, ButtonStyles } from '../types';
 
 interface RightPanelProps {
   onSetLikes: (likes: number) => void;

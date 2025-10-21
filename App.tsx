@@ -3,17 +3,9 @@ import LeftPanel from './components/LeftPanel';
 import RightPanel from './components/RightPanel';
 import BottomPanel from './components/BottomPanel';
 import LikeButton from './components/LikeButton';
-import { LogEntry, AppState } from './types';
+import { LogEntry, AppState, ButtonStyles } from './types';
 import { useLogger } from './hooks/useLogger';
 import { useWindowSize } from './hooks/useWindowSize';
-
-export interface ButtonStyles {
-  backgroundColor: string;
-  borderColor: string;
-  iconColor: string;
-  activeIconColor: string;
-  borderRadius: string;
-}
 
 const App: React.FC = () => {
   const [likes, setLikes] = useState<number>(99);
