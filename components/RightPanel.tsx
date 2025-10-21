@@ -1,4 +1,4 @@
-import React, { useState, CSSProperties } from 'https://esm.sh/react@18';
+import React, { useState, CSSProperties } from 'react';
 import Panel from './Panel.tsx';
 import { LogType, ButtonStyles } from '../types.ts';
 

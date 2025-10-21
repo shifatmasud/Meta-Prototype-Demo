@@ -1,5 +1,5 @@
-import React, { CSSProperties } from 'https://esm.sh/react@18';
-import { motion, AnimatePresence } from 'https://esm.sh/framer-motion@10.18.0?external=react';
+import React, { CSSProperties } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface CounterProps {
   value: number;

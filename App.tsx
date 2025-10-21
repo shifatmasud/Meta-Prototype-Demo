@@ -1,4 +1,4 @@
-import React, { useState, useCallback, CSSProperties } from 'https://esm.sh/react@18';
+import React, { useState, useCallback, CSSProperties } from 'react';
 import LeftPanel from './components/LeftPanel.tsx';
 import RightPanel from './components/RightPanel.tsx';
 import BottomPanel from './components/BottomPanel.tsx';

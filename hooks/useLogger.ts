@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'https://esm.sh/react@18';
+import { useState, useCallback } from 'react';
 import { LogEntry, LogType } from '../types.ts';
 
 export const useLogger = () => {
