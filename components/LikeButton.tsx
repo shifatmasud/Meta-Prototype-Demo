@@ -1,6 +1,6 @@
-import React, { useState, CSSProperties } from 'react';
-import Counter from './Counter';
-import { motion } from 'framer-motion';
+import React, { useState, CSSProperties } from 'https://esm.sh/react@18';
+import Counter from './Counter.tsx';
+import { motion } from 'https://esm.sh/framer-motion@10.18.0?external=react';
 
 interface LikeButtonProps {
   likes: number;

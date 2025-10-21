@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'https://esm.sh/react@18';
 
 interface WindowSize {
   width: number;

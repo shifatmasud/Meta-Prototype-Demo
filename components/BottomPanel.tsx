@@ -1,6 +1,6 @@
-import React, { CSSProperties } from 'react';
-import Panel from './Panel';
-import { LogEntry, LogType } from '../types';
+import React, { CSSProperties } from 'https://esm.sh/react@18';
+import Panel from './Panel.tsx';
+import { LogEntry, LogType } from '../types.ts';
 
 interface BottomPanelProps {
   logs: LogEntry[];

@@ -1,11 +1,11 @@
-import React, { useState, useCallback, CSSProperties } from 'react';
-import LeftPanel from './components/LeftPanel';
-import RightPanel from './components/RightPanel';
-import BottomPanel from './components/BottomPanel';
-import LikeButton from './components/LikeButton';
-import { LogEntry, AppState, ButtonStyles } from './types';
-import { useLogger } from './hooks/useLogger';
-import { useWindowSize } from './hooks/useWindowSize';
+import React, { useState, useCallback, CSSProperties } from 'https://esm.sh/react@18';
+import LeftPanel from './components/LeftPanel.tsx';
+import RightPanel from './components/RightPanel.tsx';
+import BottomPanel from './components/BottomPanel.tsx';
+import LikeButton from './components/LikeButton.tsx';
+import { LogEntry, AppState, ButtonStyles } from './types.ts';
+import { useLogger } from './hooks/useLogger.ts';
+import { useWindowSize } from './hooks/useWindowSize.ts';
 
 const App: React.FC = () => {
   const [likes, setLikes] = useState<number>(99);

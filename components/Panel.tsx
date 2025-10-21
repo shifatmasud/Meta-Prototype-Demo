@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties } from 'https://esm.sh/react@18';
 
 interface PanelProps {
   title: string;

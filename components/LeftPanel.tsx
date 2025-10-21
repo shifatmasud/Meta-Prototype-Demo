@@ -1,7 +1,6 @@
-import React, { useRef, CSSProperties } from 'react';
-import Panel from './Panel';
-import { AppState } from '../types';
-import { LogType } from '../types';
+import React, { useRef, CSSProperties } from 'https://esm.sh/react@18';
+import Panel from './Panel.tsx';
+import { AppState, LogType } from '../types.ts';
 
 interface LeftPanelProps {
   currentState: AppState;

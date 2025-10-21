@@ -9,23 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script async src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <!-- Babel for JSX transpilation -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- ES Module Imports -->
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "framer-motion": "https://esm.sh/framer-motion@10.18.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/"
-  }
-}
-</script>
+  <script async src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <style>
   /* Base styles from Theme Systems */
@@ -36,15 +23,48 @@
     font-size: 16px; /* 4pt Baseline Grid System: Root Font Size */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    margin: 0;
   }
   * {
     box-sizing: border-box;
     transition: background-color 300ms, color 300ms, border-color 300ms; /* 100pt Gentle Fluid Motion System */
   }
+
+  /* Pre-mount loader */
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .loader {
+    border: 4px solid #2C2C2E;
+    border-top: 4px solid #8E8E93;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18",
+    "react/": "https://esm.sh/react@18/"
+  }
+}
+</script>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <div class="loader-container">
+      <div class="loader"></div>
+    </div>
+  </div>
   <script type="text/babel" data-type="module" src="/index.tsx"></script>
 </body>
 </html>
