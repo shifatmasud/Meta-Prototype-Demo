@@ -1,0 +1,19 @@
+
+import { useState, useCallback } from 'react';
+import { LogEntry, LogType } from '../types';
+
+export const useLogger = () => {
+  const [logs, setLogs] = useState<LogEntry[]>([]);
+
+  const addLog = useCallback((message: string, type: LogType) => {
+    const newLog: LogEntry = {
+      id: Date.now() + Math.random(),
+      timestamp: new Date().toLocaleTimeString(),
+      message,
+      type,
+    };
+    setLogs(prevLogs => [newLog, ...prevLogs].slice(0, 100)); // Keep last 100 logs
+  }, []);
+
+  return { logs, addLog };
+};

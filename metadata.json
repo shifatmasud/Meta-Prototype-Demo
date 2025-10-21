@@ -1,0 +1,5 @@
+{
+  "name": "React Meta Prototype: Animated Like Button",
+  "description": "A prototype environment featuring a like button with a slot-machine style counter, built with React and Framer Motion. It includes control, console, and code import/export panels for a complete development and debugging experience.",
+  "requestFramePermissions": []
+}
