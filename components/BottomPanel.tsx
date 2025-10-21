@@ -1,52 +1,54 @@
 import React, { CSSProperties } from 'react';
 import Panel from './Panel.tsx';
 import { LogEntry, LogType } from '../types.ts';
+import { useTheme } from '../contexts/ThemeContext.tsx';
 
 interface BottomPanelProps {
   logs: LogEntry[];
 }
 
-const logTypeColors: { [key in LogType]: string } = {
-  event: '#4ADE80',  // Feedback: Green
-  state: '#60A5FA',  // Feedback: Blue
-  system: '#A78BFA', // A pleasant purple
-  error: '#F87171',   // Feedback: Red
-};
-
-const styles: { [key: string]: CSSProperties } = {
-    console: {
-        fontFamily: 'monospace',
-        fontSize: '12px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-        height: '100%',
-        overflowY: 'auto',
-    },
-    emptyLog: {
-        color: '#636366',
-    },
-    logEntry: {
-        display: 'flex',
-        alignItems: 'flex-start',
-    },
-    timestamp: {
-        color: '#636366',
-        marginRight: '8px',
-    },
-    logType: {
-        marginRight: '8px',
-        fontWeight: 'bold',
-    },
-    message: {
-        flex: 1,
-        color: '#F5F5F7',
-        whiteSpace: 'pre-wrap',
-    }
-}
-
-
 const BottomPanel: React.FC<BottomPanelProps> = ({ logs }) => {
+  const { theme } = useTheme();
+
+  const logTypeColors: { [key in LogType]: string } = {
+    event: theme.colors.Color_Feedback_Success_Content_1,
+    state: theme.colors.Color_Feedback_Info_Content_1,
+    system: theme.colors.Color_Feedback_Warning_Content_1,
+    error: theme.colors.Color_Feedback_Error_Content_1,
+  };
+
+  const styles: { [key: string]: CSSProperties } = {
+      console: {
+          fontFamily: 'monospace',
+          fontSize: theme.typography.Type_Readable_Label_S_Size,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '4px',
+          height: '100%',
+          overflowY: 'auto',
+      },
+      emptyLog: {
+          color: theme.colors.Color_Neutral_Content_3,
+      },
+      logEntry: {
+          display: 'flex',
+          alignItems: 'flex-start',
+      },
+      timestamp: {
+          color: theme.colors.Color_Neutral_Content_3,
+          marginRight: theme.spacing.Space_S,
+      },
+      logType: {
+          marginRight: theme.spacing.Space_S,
+          fontWeight: 'bold',
+      },
+      message: {
+          flex: 1,
+          color: theme.colors.Color_Neutral_Content_1,
+          whiteSpace: 'pre-wrap',
+      }
+  }
+
   return (
     <Panel title="Console" style={{ height: '100%' }} icon={<i className="ph ph-terminal-window"></i>}>
       <div style={styles.console}>

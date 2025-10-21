@@ -1,30 +1,46 @@
-import React, { useState, useCallback, CSSProperties } from 'react';
+import React, { useState, useCallback, CSSProperties, useEffect } from 'react';
 import LeftPanel from './components/LeftPanel.tsx';
 import RightPanel from './components/RightPanel.tsx';
 import BottomPanel from './components/BottomPanel.tsx';
 import LikeButton from './components/LikeButton.tsx';
+import ThemeToggle from './components/ThemeToggle.tsx';
 import { LogEntry, AppState, ButtonStyles } from './types.ts';
 import { useLogger } from './hooks/useLogger.ts';
 import { useWindowSize } from './hooks/useWindowSize.ts';
+import { useTheme } from './contexts/ThemeContext.tsx';
 
 const App: React.FC = () => {
   const [likes, setLikes] = useState<number>(99);
   const { logs, addLog } = useLogger();
   const { width } = useWindowSize();
+  const { theme } = useTheme();
   const isMobile = width < 768;
   
   const [buttonStyles, setButtonStyles] = useState<ButtonStyles>({
-    backgroundColor: '#2C2C2E',
-    borderColor: '#48484A',
-    iconColor: '#8E8E93',
-    activeIconColor: '#FFFFFF',
-    borderRadius: '50px',
+    backgroundColor: theme.colors.Color_Neutral_Surface_3,
+    borderColor: theme.colors.Color_Neutral_Border_2,
+    iconColor: theme.colors.Color_Neutral_Content_2,
+    activeIconColor: theme.colors.Color_Neutral_Content_1,
+    borderRadius: theme.sizing.Size_Border_Radius_L,
   });
 
   const handleStyleUpdate = useCallback((newStyles: Partial<ButtonStyles>) => {
     setButtonStyles(prev => ({ ...prev, ...newStyles }));
     addLog(`Button styles updated: ${JSON.stringify(newStyles, null, 2)}`, 'state');
   }, [addLog]);
+
+  // Reset button styles to theme defaults when theme changes
+  useEffect(() => {
+    const defaultStyles: ButtonStyles = {
+        backgroundColor: theme.colors.Color_Neutral_Surface_3,
+        borderColor: theme.colors.Color_Neutral_Border_2,
+        iconColor: theme.colors.Color_Neutral_Content_2,
+        activeIconColor: theme.colors.Color_Neutral_Content_1,
+        borderRadius: theme.sizing.Size_Border_Radius_L,
+    };
+    setButtonStyles(defaultStyles);
+    addLog('Button styles reset to new theme defaults.', 'system');
+  }, [theme]);
 
   const handleUpdateLikes = useCallback((action: 'increment' | 'decrement') => {
     setLikes(prevLikes => {
@@ -58,32 +74,39 @@ const App: React.FC = () => {
       display: 'flex',
       flexDirection: 'column',
       minHeight: '100vh',
-      fontFamily: '"Inter", sans-serif',
-      backgroundColor: '#000000',
-      color: '#F5F5F7',
-      padding: isMobile ? '12px' : '16px',
-      gap: isMobile ? '12px' : '16px',
+      fontFamily: theme.typography.Font_Family_Primary,
+      backgroundColor: theme.colors.Color_Neutral_Surface_1,
+      color: theme.colors.Color_Neutral_Content_1,
+      padding: isMobile ? theme.spacing.Space_M : theme.spacing.Space_L,
+      gap: isMobile ? theme.spacing.Space_M : theme.spacing.Space_L,
     },
     header: {
-      textAlign: 'center',
-      paddingBottom: '8px',
-      borderBottom: '1px solid #2C2C2E',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingBottom: theme.spacing.Space_S,
+    },
+    headerText: {
+        textAlign: 'center',
+        flexGrow: 1,
     },
     title: {
-      fontSize: isMobile ? '28px' : '32px',
+      fontSize: isMobile ? theme.typography.Type_Expressive_Display_M_Size : theme.typography.Type_Expressive_Display_L_Size,
       fontWeight: 'bold',
-      color: '#8E8E93',
+      color: theme.colors.Color_Neutral_Content_2,
+      margin: 0,
     },
     subtitle: {
-      color: '#636366',
-      fontSize: isMobile ? '14px' : '16px',
+      color: theme.colors.Color_Neutral_Content_3,
+      fontSize: isMobile ? theme.typography.Type_Readable_Body_S_Size : theme.typography.Type_Readable_Body_M_Size,
+      margin: `${theme.spacing.Space_S} 0 0 0`,
     },
     mainLayout: {
       flexGrow: 1,
       display: 'flex',
       flexDirection: isMobile ? 'column' : 'row',
       flexWrap: 'wrap',
-      gap: isMobile ? '12px' : '16px',
+      gap: isMobile ? theme.spacing.Space_M : theme.spacing.Space_L,
     },
     mainContent: {
       order: isMobile ? 0 : 1,
@@ -92,10 +115,10 @@ const App: React.FC = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#1C1C1E',
-      borderRadius: '8px',
-      padding: '32px',
-      border: '1px solid #2C2C2E',
+      backgroundColor: theme.colors.Color_Neutral_Surface_2,
+      borderRadius: theme.sizing.Size_Border_Radius_S,
+      padding: theme.spacing.Space_XL,
+      border: `1px solid ${theme.colors.Color_Neutral_Border_1}`,
       minHeight: isMobile ? '300px' : 'auto',
     },
     leftPanel: {
@@ -118,8 +141,14 @@ const App: React.FC = () => {
   return (
     <div style={styles.appContainer}>
       <header style={styles.header}>
-        <h1 style={styles.title}>Meta Prototype</h1>
-        <p style={styles.subtitle}>Like Button with Slot Machine Counter</p>
+        <div style={{flex: 1}}></div>
+        <div style={styles.headerText}>
+            <h1 style={styles.title}>Meta Prototype</h1>
+            <p style={styles.subtitle}>Like Button with Slot Machine Counter</p>
+        </div>
+        <div style={{flex: 1, display: 'flex', justifyContent: 'flex-end'}}>
+             <ThemeToggle />
+        </div>
       </header>
 
       <div style={styles.mainLayout}>

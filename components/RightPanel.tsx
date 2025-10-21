@@ -1,6 +1,8 @@
-import React, { useState, CSSProperties } from 'react';
+import React, { useState, useEffect, CSSProperties } from 'react';
 import Panel from './Panel.tsx';
+import Button from './Button.tsx';
 import { LogType, ButtonStyles } from '../types.ts';
+import { useTheme } from '../contexts/ThemeContext.tsx';
 
 interface RightPanelProps {
   onSetLikes: (likes: number) => void;
@@ -9,82 +11,78 @@ interface RightPanelProps {
   initialStyles: ButtonStyles;
 }
 
-const styles: { [key: string]: CSSProperties } = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  group: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-  },
-  label: {
-    display: 'block',
-    fontSize: '14px',
-    fontWeight: 500,
-    color: '#8E8E93',
-  },
-  subLabel: {
-    fontSize: '12px',
-    color: '#636366',
-  },
-  inputContainer: {
-    display: 'flex',
-    gap: '8px',
-  },
-  input: {
-    flexGrow: 1,
-    backgroundColor: '#2C2C2E',
-    border: '1px solid #48484A',
-    borderRadius: '8px',
-    padding: '8px 12px',
-    color: '#FFFFFF',
-    outline: 'none',
-    transition: 'border-color 150ms, box-shadow 150ms',
-    width: '100%',
-  },
-  button: {
-    border: '1px solid #48484A',
-    backgroundColor: '#2C2C2E',
-    color: '#F5F5F7',
-    fontWeight: 500,
-    padding: '8px 16px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'background-color 150ms',
-  },
-  divider: {
-    height: '1px',
-    backgroundColor: '#2C2C2E',
-    margin: '8px 0',
-  },
-  styleControlGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-  },
-  colorInputWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  colorInput: {
-    width: '32px',
-    height: '32px',
-    border: 'none',
-    padding: 0,
-    borderRadius: '6px',
-    backgroundColor: 'transparent',
-    cursor: 'pointer',
-  }
-};
-
-
 const RightPanel: React.FC<RightPanelProps> = ({ onSetLikes, addLog, onStyleUpdate, initialStyles }) => {
+  const { theme } = useTheme();
   const [inputValue, setInputValue] = useState('');
   const [styleInputs, setStyleInputs] = useState(initialStyles);
+  
+  // Update local state when initialStyles prop changes (e.g., on theme change)
+  useEffect(() => {
+    setStyleInputs(initialStyles);
+  }, [initialStyles]);
+
+  const styles: { [key: string]: CSSProperties } = {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: theme.spacing.Space_L,
+    },
+    group: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: theme.spacing.Space_M,
+    },
+    label: {
+      display: 'block',
+      fontSize: theme.typography.Type_Readable_Body_S_Size,
+      fontWeight: 500,
+      color: theme.colors.Color_Neutral_Content_2,
+    },
+    subLabel: {
+      fontSize: theme.typography.Type_Readable_Label_S_Size,
+      color: theme.colors.Color_Neutral_Content_3,
+    },
+    inputContainer: {
+      display: 'flex',
+      gap: theme.spacing.Space_S,
+    },
+    input: {
+      flexGrow: 1,
+      backgroundColor: theme.colors.Color_Neutral_Surface_3,
+      border: `1px solid ${theme.colors.Color_Neutral_Border_2}`,
+      borderRadius: theme.sizing.Size_Border_Radius_S,
+      padding: `${theme.spacing.Space_S} ${theme.spacing.Space_M}`,
+      color: theme.colors.Color_Neutral_Content_1,
+      outline: 'none',
+      transition: `border-color ${theme.transitions.Transition_Duration_Quick}, box-shadow ${theme.transitions.Transition_Duration_Quick}`,
+      width: '100%',
+    },
+    divider: {
+      height: '1px',
+      backgroundColor: theme.colors.Color_Neutral_Border_1,
+      margin: `${theme.spacing.Space_S} 0`,
+      border: 'none',
+    },
+    styleControlGroup: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '4px',
+    },
+    colorInputWrapper: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: theme.spacing.Space_S,
+    },
+    colorInput: {
+      width: '32px',
+      height: '32px',
+      border: 'none',
+      padding: 0,
+      borderRadius: '6px',
+      backgroundColor: 'transparent',
+      cursor: 'pointer',
+    }
+  };
 
   const handleSetClick = () => {
     const num = parseInt(inputValue, 10);
@@ -114,11 +112,11 @@ const RightPanel: React.FC<RightPanelProps> = ({ onSetLikes, addLog, onStyleUpda
   };
   
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.currentTarget.style.borderColor = '#3B82F6'; // Blue for focus
+    e.currentTarget.style.borderColor = theme.colors.Color_Neutral_Border_Focus;
   };
   
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.currentTarget.style.borderColor = '#48484A';
+    e.currentTarget.style.borderColor = theme.colors.Color_Neutral_Border_2;
   };
 
   const colorKeys: (keyof ButtonStyles)[] = ['backgroundColor', 'borderColor', 'iconColor', 'activeIconColor'];
@@ -142,18 +140,13 @@ const RightPanel: React.FC<RightPanelProps> = ({ onSetLikes, addLog, onStyleUpda
               placeholder="Enter a number"
               style={styles.input}
             />
-            <button
-              onClick={handleSetClick}
-              style={styles.button}
-              onMouseOver={e => (e.currentTarget.style.backgroundColor = '#48484A')}
-              onMouseOut={e => (e.currentTarget.style.backgroundColor = '#2C2C2E')}
-            >
+            <Button onClick={handleSetClick}>
               Set
-            </button>
+            </Button>
           </div>
         </div>
 
-        <div style={styles.divider}></div>
+        <hr style={styles.divider} />
 
         <div style={styles.group}>
             <label style={styles.label}>Button Style</label>
@@ -187,14 +180,12 @@ const RightPanel: React.FC<RightPanelProps> = ({ onSetLikes, addLog, onStyleUpda
                     </div>
                 )
             })}
-            <button
+            <Button
                 onClick={handleApplyStyles}
-                style={{...styles.button, width: '100%', marginTop: '8px'}}
-                onMouseOver={e => (e.currentTarget.style.backgroundColor = '#48484A')}
-                onMouseOut={e => (e.currentTarget.style.backgroundColor = '#2C2C2E')}
+                style={{ width: '100%', marginTop: theme.spacing.Space_S }}
             >
                 Apply Styles
-            </button>
+            </Button>
         </div>
       </div>
     </Panel>

@@ -1,6 +1,8 @@
 import React, { useRef, CSSProperties } from 'react';
 import Panel from './Panel.tsx';
+import Button from './Button.tsx';
 import { AppState, LogType } from '../types.ts';
+import { useTheme } from '../contexts/ThemeContext.tsx';
 
 interface LeftPanelProps {
   currentState: AppState;
@@ -8,45 +10,31 @@ interface LeftPanelProps {
   addLog: (message: string, type: LogType) => void;
 }
 
-const styles: { [key: string]: CSSProperties } = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  description: {
-    fontSize: '14px',
-    color: '#8E8E93',
-    lineHeight: 1.5,
-  },
-  buttonContainer: {
-    display: 'flex',
-    gap: '8px',
-  },
-  button: {
-    flex: 1,
-    border: '1px solid #48484A',
-    backgroundColor: '#2C2C2E',
-    color: '#F5F5F7',
-    fontWeight: 500,
-    padding: '8px 16px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'background-color 150ms',
-  },
-  exportButton: {
-    // No specific style needed, uses base button style
-  },
-  importButton: {
-     // No specific style needed, uses base button style
-  },
-  hiddenInput: {
-    display: 'none',
-  }
-};
-
 const LeftPanel: React.FC<LeftPanelProps> = ({ currentState, onStateUpdate, addLog }) => {
+  const { theme } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const styles: { [key: string]: CSSProperties } = {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: theme.spacing.Space_L,
+    },
+    description: {
+      fontSize: theme.typography.Type_Readable_Body_S_Size,
+      color: theme.colors.Color_Neutral_Content_2,
+      lineHeight: 1.5,
+      margin: 0,
+    },
+    buttonContainer: {
+      display: 'flex',
+      gap: theme.spacing.Space_S,
+    },
+    hiddenInput: {
+      display: 'none',
+    }
+  };
+
 
   const handleExport = () => {
     const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
@@ -90,22 +78,12 @@ const LeftPanel: React.FC<LeftPanelProps> = ({ currentState, onStateUpdate, addL
           Simulate a backendless workflow by saving the app state to JSON or loading a previous state.
         </p>
         <div style={styles.buttonContainer}>
-          <button
-            onClick={handleExport}
-            style={{...styles.button, ...styles.exportButton}}
-            onMouseOver={e => (e.currentTarget.style.backgroundColor = '#48484A')}
-            onMouseOut={e => (e.currentTarget.style.backgroundColor = '#2C2C2E')}
-          >
+          <Button onClick={handleExport}>
             Export State
-          </button>
-          <button
-            onClick={handleImportClick}
-            style={{...styles.button, ...styles.importButton}}
-            onMouseOver={e => (e.currentTarget.style.backgroundColor = '#48484A')}
-            onMouseOut={e => (e.currentTarget.style.backgroundColor = '#2C2C2E')}
-          >
+          </Button>
+          <Button onClick={handleImportClick}>
             Import State
-          </button>
+          </Button>
           <input
             type="file"
             ref={fileInputRef}
