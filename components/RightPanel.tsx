@@ -9,9 +9,20 @@ interface RightPanelProps {
   addLog: (message: string, type: LogType) => void;
   onStyleUpdate: (newStyles: Partial<ButtonStyles>) => void;
   initialStyles: ButtonStyles;
+  isCollapsible?: boolean;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-const RightPanel: React.FC<RightPanelProps> = ({ onSetLikes, addLog, onStyleUpdate, initialStyles }) => {
+const RightPanel: React.FC<RightPanelProps> = ({ 
+  onSetLikes, 
+  addLog, 
+  onStyleUpdate, 
+  initialStyles,
+  isCollapsible,
+  isCollapsed,
+  onToggleCollapse
+}) => {
   const { theme } = useTheme();
   const [inputValue, setInputValue] = useState('');
   const [styleInputs, setStyleInputs] = useState(initialStyles);
@@ -122,7 +133,13 @@ const RightPanel: React.FC<RightPanelProps> = ({ onSetLikes, addLog, onStyleUpda
   const colorKeys: (keyof ButtonStyles)[] = ['backgroundColor', 'borderColor', 'iconColor', 'activeIconColor'];
 
   return (
-    <Panel title="Controls" icon={<i className="ph ph-gear-six"></i>}>
+    <Panel 
+      title="Controls" 
+      icon={<i className="ph ph-gear-six"></i>}
+      isCollapsible={isCollapsible}
+      isCollapsed={isCollapsed}
+      onToggleCollapse={onToggleCollapse}
+    >
       <div style={styles.container}>
         <div style={styles.group}>
           <label htmlFor="likes-input" style={styles.label}>

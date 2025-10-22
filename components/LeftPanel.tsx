@@ -8,9 +8,19 @@ interface LeftPanelProps {
   currentState: AppState;
   onStateUpdate: (newState: AppState) => void;
   addLog: (message: string, type: LogType) => void;
+  isCollapsible?: boolean;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-const LeftPanel: React.FC<LeftPanelProps> = ({ currentState, onStateUpdate, addLog }) => {
+const LeftPanel: React.FC<LeftPanelProps> = ({ 
+  currentState, 
+  onStateUpdate, 
+  addLog,
+  isCollapsible,
+  isCollapsed,
+  onToggleCollapse
+}) => {
   const { theme } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -72,7 +82,13 @@ const LeftPanel: React.FC<LeftPanelProps> = ({ currentState, onStateUpdate, addL
   };
 
   return (
-    <Panel title="Code Import/Export" icon={<i className="ph ph-code"></i>}>
+    <Panel 
+      title="Code Import/Export" 
+      icon={<i className="ph ph-code"></i>}
+      isCollapsible={isCollapsible}
+      isCollapsed={isCollapsed}
+      onToggleCollapse={onToggleCollapse}
+    >
       <div style={styles.container}>
         <p style={styles.description}>
           Simulate a backendless workflow by saving the app state to JSON or loading a previous state.

@@ -5,9 +5,17 @@ import { useTheme } from '../contexts/ThemeContext.tsx';
 
 interface BottomPanelProps {
   logs: LogEntry[];
+  isCollapsible?: boolean;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-const BottomPanel: React.FC<BottomPanelProps> = ({ logs }) => {
+const BottomPanel: React.FC<BottomPanelProps> = ({ 
+  logs,
+  isCollapsible,
+  isCollapsed,
+  onToggleCollapse
+}) => {
   const { theme } = useTheme();
 
   const logTypeColors: { [key in LogType]: string } = {
@@ -50,7 +58,14 @@ const BottomPanel: React.FC<BottomPanelProps> = ({ logs }) => {
   }
 
   return (
-    <Panel title="Console" style={{ height: '100%' }} icon={<i className="ph ph-terminal-window"></i>}>
+    <Panel 
+      title="Console" 
+      style={{ height: '100%' }} 
+      icon={<i className="ph ph-terminal-window"></i>}
+      isCollapsible={isCollapsible}
+      isCollapsed={isCollapsed}
+      onToggleCollapse={onToggleCollapse}
+    >
       <div style={styles.console}>
         {logs.length === 0 && (
           <p style={styles.emptyLog}>No events logged yet. Click the like button to start.</p>

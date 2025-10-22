@@ -15,6 +15,12 @@ const App: React.FC = () => {
   const { width } = useWindowSize();
   const { theme } = useTheme();
   const isMobile = width < 768;
+
+  const [panelStates, setPanelStates] = useState({
+    left: false,
+    right: false,
+    bottom: false,
+  });
   
   const [buttonStyles, setButtonStyles] = useState<ButtonStyles>({
     backgroundColor: theme.colors.Color_Neutral_Surface_3,
@@ -23,6 +29,14 @@ const App: React.FC = () => {
     activeIconColor: theme.colors.Color_Neutral_Content_1,
     borderRadius: theme.sizing.Size_Border_Radius_L,
   });
+
+  const handleTogglePanel = useCallback((panel: 'left' | 'right' | 'bottom') => {
+    setPanelStates(prev => {
+        const newState = { ...prev, [panel]: !prev[panel] };
+        addLog(`Panel '${panel}' ${newState[panel] ? 'collapsed' : 'expanded'}.`, 'system');
+        return newState;
+    });
+  }, [addLog]);
 
   const handleStyleUpdate = useCallback((newStyles: Partial<ButtonStyles>) => {
     setButtonStyles(prev => ({ ...prev, ...newStyles }));
@@ -120,21 +134,25 @@ const App: React.FC = () => {
       padding: theme.spacing.Space_XL,
       border: `1px solid ${theme.colors.Color_Neutral_Border_1}`,
       minHeight: isMobile ? '300px' : 'auto',
+      transition: 'flex-grow 0.3s ease-in-out',
     },
     leftPanel: {
       order: isMobile ? 2 : 0,
-      flexBasis: isMobile ? 'auto' : '0',
-      flexGrow: 1,
+      flexBasis: isMobile ? 'auto' : (panelStates.left ? 'auto' : '0'),
+      flexGrow: isMobile ? undefined : (panelStates.left ? 0 : 1),
+      transition: 'flex-basis 0.3s ease-in-out, flex-grow 0.3s ease-in-out',
     },
     rightPanel: {
       order: isMobile ? 1 : 2,
-      flexBasis: isMobile ? 'auto' : '0',
-      flexGrow: 1,
+      flexBasis: isMobile ? 'auto' : (panelStates.right ? 'auto' : '0'),
+      flexGrow: isMobile ? undefined : (panelStates.right ? 0 : 1),
+      transition: 'flex-basis 0.3s ease-in-out, flex-grow 0.3s ease-in-out',
     },
     bottomPanel: {
       order: 3,
       flexBasis: '100%',
-      minHeight: '200px'
+      minHeight: panelStates.bottom ? undefined : '200px',
+      transition: 'min-height 0.3s ease-in-out',
     },
   };
 
@@ -161,7 +179,14 @@ const App: React.FC = () => {
         </div>
 
         <div style={styles.leftPanel}>
-          <LeftPanel currentState={{ likes }} onStateUpdate={handleStateUpdate} addLog={addLog} />
+          <LeftPanel 
+            currentState={{ likes }} 
+            onStateUpdate={handleStateUpdate} 
+            addLog={addLog}
+            isCollapsible={true}
+            isCollapsed={panelStates.left}
+            onToggleCollapse={() => handleTogglePanel('left')}
+          />
         </div>
         
         <div style={styles.rightPanel}>
@@ -170,11 +195,19 @@ const App: React.FC = () => {
             addLog={addLog} 
             onStyleUpdate={handleStyleUpdate}
             initialStyles={buttonStyles}
+            isCollapsible={true}
+            isCollapsed={panelStates.right}
+            onToggleCollapse={() => handleTogglePanel('right')}
           />
         </div>
         
         <div style={styles.bottomPanel}>
-           <BottomPanel logs={logs} />
+           <BottomPanel 
+            logs={logs}
+            isCollapsible={true}
+            isCollapsed={panelStates.bottom}
+            onToggleCollapse={() => handleTogglePanel('bottom')}
+           />
         </div>
       </div>
     </div>
